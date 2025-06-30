@@ -7,12 +7,38 @@ import './Login.scss';
 import { FormattedMessage } from 'react-intl';
 
 class Login extends Component {
-    constructor(props) {
-        super(props);
-        this.btnLogin = React.createRef();
-    }
+   constructor(props) {
+      super(props);
+      this.state = {
+         username: '',
+         password: '',
+         isShowPassword: false
+      }
+   }
 
-    render() {
+   handleOnChangeUsername = (event) => {
+      this.setState({
+         username: event.target.value,
+      })
+   }
+
+   handleOnChangePassword = (event) => {
+      this.setState({
+         password: event.target.value,
+      })
+   }
+
+   handleLogin = () => {
+      alert(this.state.username);
+   }
+
+   handleShowHidePassword = () => {
+      this.setState({
+         isShowPassword: !this.state.isShowPassword
+      })
+   }
+
+   render() {
       return (
          <div className='login-background'>
             <div className='login-container'>
@@ -20,14 +46,33 @@ class Login extends Component {
                   <div className='col-12 text-login'>Login</div>
                   <div className='col-12 form-group login-input'>
                      <label>Username:</label>
-                     <input placeholder='Enter your username' type='text' className='form-control'/>
+                     <input 
+                        value={this.state.username} 
+                        placeholder='Enter your username' 
+                        type='text' className='form-control'
+                        onChange={(event) => this.handleOnChangeUsername(event)}
+                     />
                   </div>
                   <div className='col-12 form-group login-input'>
                      <label>Password:</label>
-                     <input placeholder='Enter your password' type='password' className='form-control'/>
+                     <div className='custom-input-password'>
+                        <input 
+                           value={this.state.password} 
+                           placeholder='Enter your password' 
+                           type={this.state.isShowPassword ? 'text' : 'password'} 
+                           className='form-control'
+                           onChange={(event) => this.handleOnChangePassword(event)}
+                        />
+                        <span
+                           onClick={() => this.handleShowHidePassword()}             
+                        ><i className={this.state.isShowPassword ? 'far fa-eye' : 'far fa-eye-slash'}></i></span>
+                     </div>
                   </div>
                   <div className='col-12'>
-                     <button className='btn-login'>Login</button>
+                     <button 
+                        className='btn-login'
+                        onClick={() => this.handleLogin()}
+                     >Login</button>
                   </div>
                   <div className='col-12'>
                      <span className='forgot-password'>Forgot your password?</span>
@@ -43,21 +88,21 @@ class Login extends Component {
             </div>
          </div>
       )
-    }
+   }
 }
 
 const mapStateToProps = state => {
-    return {
-        language: state.app.language
-    };
+   return {
+      language: state.app.language
+   };
 };
 
 const mapDispatchToProps = dispatch => {
-    return {
-        navigate: (path) => dispatch(push(path)),
-        adminLoginSuccess: (adminInfo) => dispatch(actions.adminLoginSuccess(adminInfo)),
-        adminLoginFail: () => dispatch(actions.adminLoginFail()),
-    };
+   return {
+      navigate: (path) => dispatch(push(path)),
+      adminLoginSuccess: (adminInfo) => dispatch(actions.adminLoginSuccess(adminInfo)),
+      adminLoginFail: () => dispatch(actions.adminLoginFail()),
+   };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
