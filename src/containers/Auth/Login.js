@@ -5,6 +5,7 @@ import { push } from "connected-react-router";
 import * as actions from "../../store/actions";
 import './Login.scss';
 import { FormattedMessage } from 'react-intl';
+import { handleLoginApi } from '../../services/userService';
 
 class Login extends Component {
    constructor(props) {
@@ -12,7 +13,8 @@ class Login extends Component {
       this.state = {
          username: '',
          password: '',
-         isShowPassword: false
+         isShowPassword: false,
+         errorMessage: ''
       }
    }
 
@@ -28,8 +30,30 @@ class Login extends Component {
       })
    }
 
-   handleLogin = () => {
-      alert(this.state.username);
+   handleLogin = async () => {
+      this.setState({
+         errorMessage: ''
+      })
+
+      try {
+         let data = await handleLoginApi(this.state.username, this.state.password);
+         if(data && data.errorCode !== 0) {
+            this.setState({
+               errorMessage: data.message
+            })
+         }
+         if(data && data.errorCode === 0) {
+            this.props.userLoginSuccess(data.user);
+         }
+      } catch (error) {
+         if(error.response) {
+            if(error.response.data) {
+               this.setState({
+                  errorMessage: error.response.data.message
+               })
+            }
+         }
+      }      
    }
 
    handleShowHidePassword = () => {
@@ -50,6 +74,7 @@ class Login extends Component {
                         value={this.state.username} 
                         placeholder='Enter your username' 
                         type='text' className='form-control'
+                        name='email'
                         onChange={(event) => this.handleOnChangeUsername(event)}
                      />
                   </div>
@@ -57,6 +82,7 @@ class Login extends Component {
                      <label>Password:</label>
                      <div className='custom-input-password'>
                         <input 
+                           name='password'
                            value={this.state.password} 
                            placeholder='Enter your password' 
                            type={this.state.isShowPassword ? 'text' : 'password'} 
@@ -67,6 +93,9 @@ class Login extends Component {
                            onClick={() => this.handleShowHidePassword()}             
                         ><i className={this.state.isShowPassword ? 'far fa-eye' : 'far fa-eye-slash'}></i></span>
                      </div>
+                  </div>
+                  <div className='col-12' style={{ color: 'red' }}>
+                     {this.state.errorMessage}
                   </div>
                   <div className='col-12'>
                      <button 
@@ -100,8 +129,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
    return {
       navigate: (path) => dispatch(push(path)),
-      adminLoginSuccess: (adminInfo) => dispatch(actions.adminLoginSuccess(adminInfo)),
-      adminLoginFail: () => dispatch(actions.adminLoginFail()),
+      // userLoginFail: () => dispatch(actions.adminLoginFail()),
+      userLoginSuccess: (userInfor) => dispatch(actions.userLoginSuccess(userInfor))
    };
 };
 

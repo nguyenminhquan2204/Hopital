@@ -1,15 +1,26 @@
-import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
+import React, {
+    Component
+} from 'react';
+import {
+    Redirect
+} from 'react-router-dom';
+import {
+    connect
+} from 'react-redux';
 
 class Home extends Component {
 
     render() {
-        const { isLoggedIn } = this.props;
+        const {
+            isLoggedIn
+        } = this.props;
         let linkToRedirect = isLoggedIn ? '/system/user-manage' : '/login';
 
-        return (
-            <Redirect to={linkToRedirect} />
+        return ( <
+            Redirect to = {
+                linkToRedirect
+            }
+            />
         );
     }
 
@@ -17,13 +28,12 @@ class Home extends Component {
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state.admin.isLoggedIn
+        isLoggedIn: state.user.isLoggedIn
     };
 };
 
 const mapDispatchToProps = dispatch => {
-    return {
-    };
+    return {};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
