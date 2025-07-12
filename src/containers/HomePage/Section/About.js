@@ -15,10 +15,10 @@ class About extends Component {
                         width="100%" height="400px" 
                         src="https://www.youtube.com/embed/pvjKjGQANAw" 
                         title="Gừng : 7 Lợi Ích Sức Khỏe Tuyệt Vời Nhiều Người Có Thể Không Biết | SKĐS" 
-                        frameborder="0" 
+                        frameBorder="0" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                         referrerpolicy="strict-origin-when-cross-origin" 
-                        allowfullscreen>
+                        allowFullScreen>
                      </iframe>
                   </div>
                   <div className='content-right'>
