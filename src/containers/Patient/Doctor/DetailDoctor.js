@@ -4,6 +4,7 @@ import HomeHeader from '../../HomePage/HomeHeader';
 import './DetailDoctor.scss';
 import { getDetailInforDoctor } from '../../../services/userService';
 import { LANGUAGES } from '../../../utils/constant';
+import DoctorSchedule from './DoctorSchedule';
 
 class DetailDoctor extends Component {
 
@@ -20,6 +21,11 @@ class DetailDoctor extends Component {
       let id = this.props.match.params.id;
       let res = await getDetailInforDoctor(id);
       // console.log(res);
+
+      this.setState({
+        currentDoctorId: id
+      })
+
       if(res && res.errorCode === 0) {
         this.setState({
           detailDoctor: res.data
@@ -60,7 +66,14 @@ class DetailDoctor extends Component {
             </div>
           </div>
           <div className='schedule-doctor'>
-
+              <div className='content-left'>
+                <DoctorSchedule 
+                  doctorIdFromParent={this.state.currentDoctorId}
+                />
+              </div>
+              <div className='content-right'>
+              
+              </div>
           </div>
           <div className='detail-infor-doctor'>
               {detailDoctor && detailDoctor.Markdown && detailDoctor.Markdown.contentHTML

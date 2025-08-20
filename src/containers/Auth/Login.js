@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from "connected-react-router";
-// import * as actions from "../store/actions";
 import * as actions from "../../store/actions";
 import './Login.scss';
 import { FormattedMessage } from 'react-intl';
 import { handleLoginApi } from '../../services/userService';
+import { toast } from 'react-toastify';
 
 class Login extends Component {
    constructor(props) {
@@ -44,6 +44,7 @@ class Login extends Component {
          }
          if(data && data.errorCode === 0) {
             this.props.userLoginSuccess(data.user);
+            toast.success("Login successful!");
          }
       } catch (error) {
          if(error.response) {
@@ -60,6 +61,12 @@ class Login extends Component {
       this.setState({
          isShowPassword: !this.state.isShowPassword
       })
+   }
+
+   handleOnKeyDown = (event) => {
+      if(event.key === 'Enter' || event.keyCode === 13) {
+         this.handleLogin();
+      }
    }
 
    render() {
@@ -88,6 +95,7 @@ class Login extends Component {
                            type={this.state.isShowPassword ? 'text' : 'password'} 
                            className='form-control'
                            onChange={(event) => this.handleOnChangePassword(event)}
+                           onKeyDown={(event) => this.handleOnKeyDown(event)}
                         />
                         <span
                            onClick={() => this.handleShowHidePassword()}             
