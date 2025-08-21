@@ -138,9 +138,9 @@ class ManageDoctor extends Component {
          doctorId: this.state.selectedDoctor.value,
          action: hasOldData === true ? CRUD_ACTIONS.EDIT : CRUD_ACTIONS.CREATE,
 
-         selectedPrice: this.state.selectedPrice.value,
-         selectedPayment: this.state.selectedPayment.value,
-         selectedProvince: this.state.selectedProvince.value,
+         selectedPrice: this.state.selectedPrice,
+         selectedPayment: this.state.selectedPayment,
+         selectedProvince: this.state.selectedProvince,
          nameClinic: this.state.nameClinic,
          addressClinic: this.state.addressClinic,
          note: this.state.note,
@@ -153,24 +153,60 @@ class ManageDoctor extends Component {
 
    handleChangeSelect = async (selectedDoctor) => {
       this.setState({ selectedDoctor });
-
+      let {listPayment, listProvince, listPrice} = this.state;
       let res = await getDetailInforDoctor(selectedDoctor.value);
+      console.log('aaaaaaaaaaaa', res);
 
       if(res && res.errorCode === 0 && res.data && res.data.Markdown) {
          let markdown = res.data.Markdown;
-         
+         let addressClinic = '', nameClinic = '', note = '', paymentId = '', priceId = '', provinceId = '';
+         let selectedPayment = '', selectedPrice = '', selectedProvince = '';
+
+         if(res.data.Doctor_Infor) {
+            addressClinic = res.data.Doctor_Infor.addressClinic;
+            nameClinic = res.data.Doctor_Infor.nameClinic;
+            note = res.data.Doctor_Infor.note;
+            paymentId = res.data.Doctor_Infor.paymentId;
+            priceId = res.data.Doctor_Infor.priceId;
+            provinceId = res.data.Doctor_Infor.provinceId;
+
+            // console.log('hhhhhhhhhhh', res.data.Doctor_Infor);
+
+            selectedPayment = listPayment.find(item => {
+               return item.value = paymentId;
+            })
+            selectedPrice = listPrice.find(item => {
+               return item.value = priceId;
+            })
+            selectedProvince = listProvince.find(item => {
+               return item.value = provinceId;
+            })
+         }
+
          this.setState({
             contentHTML: markdown.contentHTML,
             contentMarkdown: markdown.contentMarkdown,
             description: markdown.description,
-            hasOldData: true
+            hasOldData: true,
+            addressClinic: addressClinic,
+            nameClinic: nameClinic,
+            note: note,
+            selectedPayment: selectedPayment,
+            selectedPrice: selectedPrice,
+            selectedProvince: selectedProvince
          })
       } else {
          this.setState({
             contentHTML: '',
             contentMarkdown: '',
             description: '',
-            hasOldData: false
+            hasOldData: false,
+            addressClinic: '',
+            nameClinic: '',
+            note: '',
+            selectedPrice: '',
+            selectedProvince: '',
+            selectedPayment: ''
          })
       }
    }
@@ -196,7 +232,8 @@ class ManageDoctor extends Component {
 
    render() {
       let hasOldData = this.state.hasOldData;
-
+      console.log("Check state", this.state);
+      
       return (
             <div className="manage-doctor-container">
                <div className="manage-doctor-title"><FormattedMessage id="admin.manage-doctor.title" /></div>
