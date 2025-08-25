@@ -11,6 +11,10 @@ import { LANGUAGES } from '../../../../utils';
 import Select from 'react-select';
 import {postPatientBookAppointment} from '../../../../services/userService';
 import {toast} from 'react-toastify';
+import moment from 'moment';
+import NumberFormat from 'react-number-format';
+// import _ from 'lodash';
+import localization from 'moment/locale/vi';
 
 class BookingModal extends Component {
 
@@ -93,9 +97,36 @@ class BookingModal extends Component {
       })
    }
 
+   buildTimeBooking = (dataTime) => {
+      let {language} = this.props;
+
+      if(dataTime && !_.isEmpty(dataTime)) {
+         let date = language === LANGUAGES.VI ? moment.unix(+dataTime.date/1000).format('dddd - DD/MM/YYYY') : moment.unix(+dataTime.date/1000).locale('en').format('ddd - MM/DD/YYYY')
+         let time = language === LANGUAGES.VI ? dataTime.timeTypeData.valueVi : dataTime.timeTypeData.valueEn;
+         
+         return `${time} - ${date}`;
+      }
+      return ''
+   }
+
+   buildDoctorName = (dataTime) => {
+      let {language} = this.props;
+
+      if(dataTime && !_.isEmpty(dataTime)) {
+         let name = language === LANGUAGES.VI ?
+            `${dataTime.doctorData.lastName} ${dataTime.doctorData.firstName}`
+            : `${dataTime.doctorData.firstName} ${dataTime.doctorData.lastName}`;
+
+         return name;
+      }
+      return '';
+   }
+
    hanldeConfirmBooking = async () => {
       // console.log('aaaaaaa', this.state);
       let date = new Date(this.state.birthday).getTime();
+      let timeString = this.buildTimeBooking(this.props.dataScheduleTimeModal);
+      let doctorName = this.buildDoctorName(this.props.dataScheduleTimeModal);
 
       let res = await postPatientBookAppointment({
          fullName: this.state.fullName,
@@ -106,7 +137,10 @@ class BookingModal extends Component {
          date: date,
          doctorId: this.state.doctorId,
          selectedGender: this.state.selectedGender.value,
-         timeType: this.state.timeType
+         timeString: timeString,
+         timeType: this.state.timeType,
+         language: this.props.language,
+         doctorName: doctorName
       })
 
       if(res && res.errorCode === 0) {
