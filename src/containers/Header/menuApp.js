@@ -49,7 +49,11 @@ export const doctorMenu = [
             { // quan ly ke hoach kham benh cua bac sy
                 name: 'menu.doctor.manage-schedule',
                 link: '/doctor/manage-schedule'
-            }
+            },
+            { // quan ly ke hoach kham benh cua bac sy
+                name: 'menu.doctor.manage-patient',
+                link: '/doctor/manage-patient'
+            },
         ]
     }
 ]

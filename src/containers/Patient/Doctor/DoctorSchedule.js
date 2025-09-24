@@ -60,9 +60,14 @@ class DoctorSchedule extends Component {
       
       if(allDays && allDays.length > 0) {
          // let res = await getScheduleDoctorByDate(this.props.doctorIdFromParent, allDays[0].value);
-
          this.setState({
             allDays: allDays,
+         })
+      }
+      if(this.props.doctorIdFromParent) {
+         let res = await getScheduleDoctorByDate(this.props.doctorIdFromParent, allDays[0].value);
+         this.setState({
+            allAvalableTime: res.data ? res.data : []
          })
       }
    }

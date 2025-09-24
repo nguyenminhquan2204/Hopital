@@ -8,6 +8,8 @@ import NumberFormat from 'react-number-format';
 import _ from 'lodash';
 import moment from 'moment';
 import localization from 'moment/locale/vi';
+import { Link } from 'react-router-dom';
+
 
 class ProfileDoctor extends Component {
 
@@ -69,7 +71,7 @@ class ProfileDoctor extends Component {
   render() {
    // console.log('Check state', this.state);
    let {dataProfile} = this.state;
-   let {language, isShowDescriptionDoctor, dataTime} = this.props;
+   let { doctorId, isShowLinkDetail, isShowPrice, language, isShowDescriptionDoctor, dataTime} = this.props;
    let nameEn = '', nameVi = '';
 
    if(dataProfile && dataProfile.positionData) {
@@ -98,27 +100,37 @@ class ProfileDoctor extends Component {
                }
             </div>
          </div>
-         <div className='price'>
-            <FormattedMessage id="patient.booking-modal.price"/> 
-            {dataProfile && dataProfile.Doctor_Infor && language === LANGUAGES.VI &&
-               <NumberFormat 
-                  className='currency'
-                  value={dataProfile.Doctor_Infor.priceTypeData.valueVi}
-                  displayType={'text'}
-                  thousandSeparator={true}
-                  suffix={'VND'}
-               /> 
-            }
-            {dataProfile && dataProfile.Doctor_Infor && language === LANGUAGES.EN && 
-               <NumberFormat 
-                  className='currency'
-                  value={dataProfile.Doctor_Infor.priceTypeData.valueEn}
-                  displayType={'text'}
-                  thousandSeparator={true}
-                  suffix={'$'}
-               /> 
-            }
-         </div>
+         { isShowLinkDetail === true && 
+            <div
+               className='view-detail-doctor'
+            >  
+               {/* <a href={`/detail-doctor/${doctorId}`}>Xem thêm</a> */}
+               <Link to={`/detail-doctor/${doctorId}`}>Xem thêm</Link>
+            </div> 
+         }
+         { isShowPrice === true &&
+            <div className='price'>
+               <FormattedMessage id="patient.booking-modal.price"/> 
+               {dataProfile && dataProfile.Doctor_Infor && language === LANGUAGES.VI &&
+                  <NumberFormat 
+                     className='currency'
+                     value={dataProfile.Doctor_Infor.priceTypeData.valueVi}
+                     displayType={'text'}
+                     thousandSeparator={true}
+                     suffix={'VND'}
+                  /> 
+               }
+               {dataProfile && dataProfile.Doctor_Infor && language === LANGUAGES.EN && 
+                  <NumberFormat 
+                     className='currency'
+                     value={dataProfile.Doctor_Infor.priceTypeData.valueEn}
+                     displayType={'text'}
+                     thousandSeparator={true}
+                     suffix={'$'}
+                  /> 
+               }
+            </div>
+         }
       </div>
    );
   }

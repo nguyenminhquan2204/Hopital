@@ -102,7 +102,7 @@ class Login extends Component {
 
         return (
             <div className="login-wrapper">
-                <div className="login-container">
+                <div className="">
                     <div className="form_login">
                         <h2 className="title">
                             <FormattedMessage id="login.login" />

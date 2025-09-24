@@ -1,0 +1,1 @@
+npm install --save-exact react-loading-overlay@1.0.1 --legacy-peer-deps

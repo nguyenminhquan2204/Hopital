@@ -124,7 +124,7 @@ class BookingModal extends Component {
 
    hanldeConfirmBooking = async () => {
       // console.log('aaaaaaa', this.state);
-      let date = new Date(this.state.birthday).getTime();
+      let birthday = new Date(this.state.birthday).getTime();
       let timeString = this.buildTimeBooking(this.props.dataScheduleTimeModal);
       let doctorName = this.buildDoctorName(this.props.dataScheduleTimeModal);
 
@@ -134,7 +134,8 @@ class BookingModal extends Component {
          email: this.state.email,
          address: this.state.address,
          reason: this.state.reason,
-         date: date,
+         date: this.props.dataScheduleTimeModal.date,
+         birthday: birthday,
          doctorId: this.state.doctorId,
          selectedGender: this.state.selectedGender.value,
          timeString: timeString,
@@ -178,6 +179,8 @@ class BookingModal extends Component {
                      doctorId={doctorId}
                      isShowDescriptionDoctor={false}
                      dataTime={dataScheduleTimeModal}
+                     isShowLinkDetail={false}
+                     isShowPrice={true}
                   />
                </div>
                <div className='row'>
